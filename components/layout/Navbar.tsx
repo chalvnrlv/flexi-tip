@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { Search, MessageCircle, LogOut, Package } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { useNavigate } from 'react-router-dom';
-import logoFlexiTip from '../../images/flexi-tip.png';
+
+const logoFlexiTip = '/images/flexi-tip.png';
 
 const Navbar = () => {
     const { logout, user } = useAuthStore();

@@ -1,6 +1,3 @@
-// Mock Data untuk FlexiTip - Demo Purposes Only
-// Data dummy dengan locale Indonesia
-
 import { User } from '../types';
 
 // ============================================

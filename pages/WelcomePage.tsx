@@ -1,7 +1,8 @@
 
 import React from 'react';
 import { ArrowRight } from 'lucide-react';
-import logoFlexiTip from '../images/flexi-tip.png';
+
+const logoFlexiTip = '/images/flexi-tip.png';
 
 interface WelcomePageProps {
   onNavigateToLogin: () => void;

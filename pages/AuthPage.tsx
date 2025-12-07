@@ -5,7 +5,10 @@ import Input from '../components/Input';
 import Button from '../components/Button';
 import { useAuthStore } from '../store/authStore';
 import { getUserByEmail, MOCK_USERS, MockUser } from '../src/mockData';
-import logoFlexiTip from '../images/flexi-tip.png';
+
+const logoFlexiTip = '/images/flexi-tip.png';
+
+const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
 
 interface AuthPageProps {
   onLogin: () => void;
