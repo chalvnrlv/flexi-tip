@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Search, MapPin, Globe, ShoppingCart, Sparkles, Plane as PlaneIcon } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { useAuthStore } from '../store/authStore';
 import { filterProducts, MockProduct } from '../src/mockData';
 import MainLayout from '../components/layout/MainLayout';
@@ -7,6 +8,7 @@ import Button from '../components/Button';
 import AIChat from '../components/AIChat';
 
 const ProductCatalog: React.FC = () => {
+  const navigate = useNavigate();
   const { user, token } = useAuthStore();
   const [products, setProducts] = useState<MockProduct[]>([]);
   const [loading, setLoading] = useState(false);
@@ -55,7 +57,7 @@ const ProductCatalog: React.FC = () => {
 
   const handleCheckout = (productId: string) => {
     // Navigate ke halaman checkout
-    window.location.href = `/checkout/${productId}`;
+    navigate(`/checkout/${productId}`);
   };
 
   const filteredProducts = products.filter(product => {

@@ -16,42 +16,56 @@ interface AuthState {
     loadUserFromStorage: () => void;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-    user: null,
-    token: null,
-    isAuthenticated: false,
-    isLoading: false,
-    error: null,
+// Read initial state from storage
+const getInitialState = () => {
+    const token = localStorage.getItem('token');
+    const userStr = localStorage.getItem('user');
+    let user = null;
 
-    login: (user, token) => {
-        localStorage.setItem('token', token);
-        localStorage.setItem('user', JSON.stringify(user));
-        set({ user, token, isAuthenticated: true, error: null });
-    },
-
-    logout: () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('user');
-        set({ user: null, token: null, isAuthenticated: false, error: null });
-    },
-
-    setLoading: (isLoading) => set({ isLoading }),
-
-    setError: (error) => set({ error }),
-
-    loadUserFromStorage: () => {
-        const token = localStorage.getItem('token');
-        const userStr = localStorage.getItem('user');
-
-        if (token && userStr) {
-            try {
-                const user = JSON.parse(userStr);
-                set({ user, token, isAuthenticated: true });
-            } catch (e) {
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                set({ user: null, token: null, isAuthenticated: false });
-            }
+    if (userStr) {
+        try {
+            user = JSON.parse(userStr);
+        } catch (e) {
+            console.error('Failed to parse user from storage');
+            localStorage.removeItem('user');
         }
     }
-}));
+
+    return {
+        token,
+        user,
+        isAuthenticated: !!(token && user)
+    };
+};
+
+export const useAuthStore = create<AuthState>((set) => {
+    const initialState = getInitialState();
+
+    return {
+        ...initialState,
+        isLoading: false,
+        error: null,
+
+        login: (user, token) => {
+            localStorage.setItem('token', token);
+            localStorage.setItem('user', JSON.stringify(user));
+            set({ user, token, isAuthenticated: true, error: null });
+        },
+
+        logout: () => {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            set({ user: null, token: null, isAuthenticated: false, error: null });
+        },
+
+        setLoading: (isLoading) => set({ isLoading }),
+
+        setError: (error) => set({ error }),
+
+        loadUserFromStorage: () => {
+            // Re-sync if needed, though initial state handles the boot
+            const state = getInitialState();
+            set({ ...state });
+        }
+    };
+});
