@@ -5,6 +5,7 @@ import Input from '../components/Input';
 import Button from '../components/Button';
 import { useAuthStore } from '../store/authStore';
 import { getUserByEmail, MOCK_USERS, MockUser } from '../src/mockData';
+import logoFlexiTip from '../images/flexi-tip.png';
 
 interface AuthPageProps {
   onLogin: () => void;
@@ -170,7 +171,7 @@ const AuthPage: React.FC<AuthPageProps> = ({
             <div className="relative mb-6 group">
               <div className="absolute inset-0 bg-white/20 rounded-full blur-xl group-hover:blur-2xl transition-all duration-500"></div>
               <img
-                src="/images/flexi-tip.png"
+                src={logoFlexiTip}
                 alt="FlexiTip Logo"
                 className="relative h-32 w-32 object-contain drop-shadow-2xl transition-transform duration-500 hover:scale-110 hover:rotate-3"
               />

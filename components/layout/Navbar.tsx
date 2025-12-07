@@ -1,12 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Search, MessageCircle, LogOut } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { useNavigate } from 'react-router-dom';
+import logoFlexiTip from '../../images/flexi-tip.png';
 
 const Navbar = () => {
     const { logout, user } = useAuthStore();
     const navigate = useNavigate();
-    const [isMobileMenuOpen, setIsMobileMenuOpen] = React.useState(false);
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     const handleLogout = () => {
         logout();
@@ -26,7 +27,7 @@ const Navbar = () => {
                                 onClick={() => navigate('/dashboard')}
                             >
                                 <div className="relative h-10 w-10 overflow-hidden rounded-xl bg-gradient-to-br from-brand-dark to-brand-medium shadow-lg transition-transform group-hover:scale-105">
-                                    <img src="/images/flexi-tip.png" alt="Logo" className="h-full w-full object-cover opacity-90" />
+                                    <img src={logoFlexiTip} alt="Logo" className="h-full w-full object-cover opacity-90" />
                                 </div>
                                 <span className="text-2xl font-bold bg-gradient-to-r from-brand-dark to-brand-medium bg-clip-text text-transparent tracking-tight">
                                     FlexiTip
