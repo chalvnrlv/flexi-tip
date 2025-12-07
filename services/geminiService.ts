@@ -15,9 +15,9 @@ export const generateAssistantResponse = async (
 
     // Filter produk berdasarkan context
     const products = filterProducts({ type: context });
-    
+
     // Buat context untuk Gemini tentang produk yang tersedia
-    const productContext = products.slice(0, 10).map(p => 
+    const productContext = products.slice(0, 10).map(p =>
       `- ${p.name} (${p.brand}) dari ${p.asalProduk} ke ${p.tujuanProduk}, Rp ${p.price.toLocaleString('id-ID')}`
     ).join('\n');
 
@@ -51,14 +51,20 @@ Fokus pada produk ${context === 'local' ? 'lokal Indonesia' : 'dari luar negeri'
 
     const data = await response.json();
 
+    if (data.error) {
+      console.error("Gemini API Error Response:", data.error);
+      return `Maaf, terjadi kesalahan: ${data.error.message} (Code: ${data.error.code})`;
+    }
+
     if (data.candidates && data.candidates[0]) {
       return data.candidates[0].content.parts[0].text;
     } else {
-      return "Maaf, saya tidak dapat memproses pertanyaan Anda saat ini. Coba lagi nanti.";
+      console.warn("Gemini Debug: Candidates empty. Safety ratings might be blocking. Response:", data);
+      return "Maaf, saya tidak dapat memproses pertanyaan ini (Safety Block atau Empty Response).";
     }
 
   } catch (error) {
-    console.error("Gemini API Error:", error);
-    return "Terjadi kesalahan saat menghubungi asisten. Silakan coba lagi.";
+    console.error("Gemini API Network/System Error:", error);
+    return "Terjadi kesalahan koneksi ke asisten AI.";
   }
 };

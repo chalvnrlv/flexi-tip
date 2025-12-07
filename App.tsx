@@ -5,6 +5,7 @@ import WelcomePage from './pages/WelcomePage';
 import AuthPage from './pages/AuthPage';
 import Dashboard from './pages/Dashboard';
 import CheckoutPage from './pages/CheckoutPage';
+import OrderHistory from './pages/OrderHistory';
 import { useAuthStore } from './store/authStore';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
@@ -95,6 +96,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <CheckoutWrapper />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/order-history"
+              element={
+                <ProtectedRoute>
+                  <OrderHistory />
                 </ProtectedRoute>
               }
             />

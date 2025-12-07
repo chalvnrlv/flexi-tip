@@ -4,6 +4,65 @@
 import { User } from '../types';
 
 // ============================================
+// DAERAH INDONESIA (Defined FIRST to avoid reference errors)
+// ============================================
+
+export const INDONESIA_PROVINCES = [
+  'Jakarta',
+  'Jawa Barat',
+  'Jawa Tengah',
+  'Jawa Timur',
+  'DI Yogyakarta',
+  'Banten',
+  'Bali',
+  'Sumatera Utara',
+  'Sumatera Barat',
+  'Sumatera Selatan',
+  'Riau',
+  'Kalimantan Timur',
+  'Kalimantan Selatan',
+  'Sulawesi Selatan',
+  'Sulawesi Utara',
+  'Papua',
+];
+
+export const INDONESIA_CITIES = [
+  'Jakarta',
+  'Bandung',
+  'Surabaya',
+  'Medan',
+  'Semarang',
+  'Yogyakarta',
+  'Denpasar',
+  'Makassar',
+  'Palembang',
+  'Tangerang',
+  'Bekasi',
+  'Depok',
+  'Bogor',
+  'Malang',
+  'Solo',
+  'Balikpapan',
+  'Manado',
+  'Pontianak',
+  'Banjarmasin',
+  'Samarinda',
+];
+
+export const GLOBAL_LOCATIONS = [
+  'Bangkok, Thailand',
+  'Seoul, Korea',
+  'Tokyo, Japan',
+  'Singapore',
+  'Kuala Lumpur, Malaysia',
+  'Hong Kong',
+  'Shanghai, China',
+  'Taipei, Taiwan',
+  'Manila, Philippines',
+  'Ho Chi Minh, Vietnam',
+];
+
+// ============================================
 // MOCK USERS (Customer & Jastiper)
 // ============================================
 
@@ -138,9 +197,41 @@ export const MOCK_USERS: MockUser[] = [
     password: 'password123',
     phone: '082134567896',
     role: 'jastiper',
-    asalDaerah: 'Jakarta',
+    asalDaerah: 'Yogyakarta',
     isJastiper: true,
     avatar: 'https://i.pravatar.cc/150?img=16',
+  },
+  {
+    id: '108',
+    name: 'Nicole Anacia',
+    email: 'nicole@jastiper.com',
+    password: 'nicole123',
+    phone: '081299887766',
+    role: 'jastiper',
+    asalDaerah: 'Malang',
+    isJastiper: true,
+    avatar: 'https://i.pravatar.cc/150?img=20',
+  },
+  {
+    id: '109',
+    name: 'Ucok Jastip Medan',
+    email: 'ucok@jastiper.com',
+    password: 'password123',
+    phone: '081266778899',
+    role: 'jastiper',
+    asalDaerah: 'Medan',
+    isJastiper: true,
+    avatar: 'https://i.pravatar.cc/150?img=53',
+  },
+  {
+    id: '6',
+    name: 'Corenshia G',
+    email: 'corenshia@customer.com',
+    password: 'coren123',
+    phone: '081255667788',
+    role: 'customer',
+    asalDaerah: 'Surabaya',
+    avatar: 'https://i.pravatar.cc/150?img=21',
   },
 ];
 
@@ -168,6 +259,7 @@ export interface MockProduct {
 }
 
 export const MOCK_PRODUCTS: MockProduct[] = [
+
   // Thailand Products
   {
     id: 'p1',
@@ -735,64 +827,143 @@ export const MOCK_PRODUCTS: MockProduct[] = [
   },
 ];
 
+// Generate products evenly distributed among Jastipers
+// We pick a few active Jastipers to distribute the new product to
+// UPDATE: User requested "Nicole Anacia" (ID 108) be the sole jastiper for this product.
+// UPDATE: User requested "Nicole Anacia" (ID 108) be the sole jastiper for this product.
+// UPDATE: User requested availability in ALL CITIES. 
+// We combine Provinces and Cities to ensure coverage.
+const ALL_LOCATIONS = [...new Set([...INDONESIA_PROVINCES, ...INDONESIA_CITIES])];
+
+const GENERATED_PRODUCTS = ALL_LOCATIONS.map((location, index) => {
+  return {
+    id: `p31-${index}`,
+    jastiperId: '108', // Nicole Anacia
+    jastiperName: 'Nicole Anacia',
+    name: 'Rempeyek Bayam Malang',
+    description: 'Rempeyek bayam renyah khas Malang, enak dan gurih.',
+    category: 'Makanan & Minuman',
+    brand: 'Oleh-Oleh Malang',
+    price: 15000,
+    currency: 'IDR',
+    asalProduk: 'Malang',
+    tujuanProduk: location,
+    images: ['/images/jastip/rempeyek-bayam.jpg'],
+    stock: 50,
+    estimatedWeight: 0.2,
+    status: 'available' as const,
+    type: 'local' as const,
+  };
+});
+
+// Append generated products to the main list
+MOCK_PRODUCTS.push(...GENERATED_PRODUCTS);
+
 // ============================================
-// DAERAH INDONESIA
+// NEW: CROSS-CITY PRODUCTS FOR FULL DASHBOARD
 // ============================================
+// We will generate a few products for each major city that are available GLOBALLY (to all target cities)
+// This ensures that Budi (JKT), Siti (BDG), Andi (SBY), Dewi (YGY), Rudi (MDN) all see items.
 
-export const INDONESIA_PROVINCES = [
-  'Jakarta',
-  'Jawa Barat',
-  'Jawa Tengah',
-  'Jawa Timur',
-  'DI Yogyakarta',
-  'Banten',
-  'Bali',
-  'Sumatera Utara',
-  'Sumatera Barat',
-  'Sumatera Selatan',
-  'Riau',
-  'Kalimantan Timur',
-  'Kalimantan Selatan',
-  'Sulawesi Selatan',
-  'Sulawesi Utara',
-  'Papua',
+const CROSS_CITY_LOCATIONS = ['Jakarta', 'Bandung', 'Surabaya', 'Yogyakarta', 'Medan', 'Semarang', 'Bali'];
+
+const NEW_MOCK_PRODUCTS: MockProduct[] = [
+  // From Jakarta (Sarah - 101)
+  ...CROSS_CITY_LOCATIONS.flatMap((target, i) => ([
+    {
+      id: `gen-jkt-1-${i}`,
+      jastiperId: '101', jastiperName: 'Sarah Jastip Jakarta',
+      name: 'Roti Buaya Mini', description: 'Roti buaya ukuran snack box khas Betawi',
+      category: 'Makanan & Minuman', brand: 'Betawi Asli', price: 25000, currency: 'IDR',
+      asalProduk: 'Jakarta', tujuanProduk: target,
+      images: ['https://placehold.co/400x400/8B4513/FFF?text=Roti+Buaya'],
+      stock: 20, estimatedWeight: 0.3, status: 'available' as const, type: 'local' as const
+    },
+    {
+      id: `gen-jkt-2-${i}`,
+      jastiperId: '101', jastiperName: 'Sarah Jastip Jakarta',
+      name: 'Asinan Betawi H. Mansyur', description: 'Asinan sayur segar legendaris',
+      category: 'Makanan & Minuman', brand: 'H. Mansyur', price: 40000, currency: 'IDR',
+      asalProduk: 'Jakarta', tujuanProduk: target,
+      images: ['https://placehold.co/400x400/FFA500/000?text=Asinan+Betawi'],
+      stock: 15, estimatedWeight: 0.5, status: 'available' as const, type: 'local' as const
+    }
+  ])),
+
+  // From Bandung (Korea Shop - 103 OR maybe specific Bandung Jastiper? using 103 for now as they are in Bandung)
+  ...CROSS_CITY_LOCATIONS.flatMap((target, i) => ([
+    {
+      id: `gen-bdg-1-${i}`,
+      jastiperId: '103', jastiperName: 'Korea Shop Bandung', // Assuming they also do local
+      name: 'Prima Rasa Picnic Roll', description: 'Pastry isi daging cincang khas Bandung',
+      category: 'Makanan & Minuman', brand: 'Prima Rasa', price: 95000, currency: 'IDR',
+      asalProduk: 'Bandung', tujuanProduk: target,
+      images: ['https://placehold.co/400x400/D2691E/FFF?text=Picnic+Roll'],
+      stock: 30, estimatedWeight: 0.8, status: 'available' as const, type: 'local' as const
+    }
+  ])),
+
+  // From Surabaya (Japan Market - 106 OR Bali Hub - 104)
+  ...CROSS_CITY_LOCATIONS.flatMap((target, i) => ([
+    {
+      id: `gen-sby-1-${i}`,
+      jastiperId: '104', jastiperName: 'Bali Souvenir Hub', // Assuming they handle East Java too
+      name: 'Almond Crispy Cheese', description: 'Camilan renyah kekinian khas Surabaya',
+      category: 'Makanan & Minuman', brand: 'Wisata Rasa', price: 65000, currency: 'IDR',
+      asalProduk: 'Surabaya', tujuanProduk: target,
+      images: ['https://placehold.co/400x400/F0E68C/000?text=Almond+Crispy'],
+      stock: 40, estimatedWeight: 0.4, status: 'available' as const, type: 'local' as const
+    }
+  ])),
+
+  // From Yogyakarta (Jogja Batik - 107)
+  ...CROSS_CITY_LOCATIONS.flatMap((target, i) => ([
+    {
+      id: `gen-ygy-1-${i}`,
+      jastiperId: '107', jastiperName: 'Jogja Batik Center',
+      name: 'Bakpia Kurnia Sari', description: 'Bakpia kulit tipis isi kacang hijau/keju/coklat',
+      category: 'Makanan & Minuman', brand: 'Kurnia Sari', price: 55000, currency: 'IDR',
+      asalProduk: 'Yogyakarta', tujuanProduk: target,
+      images: ['https://placehold.co/400x400/FFD700/8B4513?text=Bakpia+KS'],
+      stock: 50, estimatedWeight: 0.6, status: 'available' as const, type: 'local' as const
+    },
+    {
+      id: `gen-ygy-2-${i}`,
+      jastiperId: '107', jastiperName: 'Jogja Batik Center',
+      name: 'Gudeg Yu Djum Vakum', description: 'Gudeg kering kemasan vakum tahan lama',
+      category: 'Makanan & Minuman', brand: 'Yu Djum', price: 150000, currency: 'IDR',
+      asalProduk: 'Yogyakarta', tujuanProduk: target,
+      images: ['https://placehold.co/400x400/8B4513/FFF?text=Gudeg+Vakum'],
+      stock: 20, estimatedWeight: 1.0, status: 'available' as const, type: 'local' as const
+    }
+  ])),
+
+  // From Medan (Ucok Jastip - 109)
+  ...CROSS_CITY_LOCATIONS.flatMap((target, i) => ([
+    {
+      id: `gen-mdn-1-${i}`,
+      jastiperId: '109', jastiperName: 'Ucok Jastip Medan',
+      name: 'Bolu Meranti Standard', description: 'Bolu gulung tekstur lembut khas Medan',
+      category: 'Makanan & Minuman', brand: 'Meranti', price: 90000, currency: 'IDR',
+      asalProduk: 'Medan', tujuanProduk: target,
+      images: ['https://placehold.co/400x400/8B0000/FFF?text=Bolu+Meranti'],
+      stock: 25, estimatedWeight: 1.0, status: 'available' as const, type: 'local' as const
+    },
+    {
+      id: `gen-mdn-2-${i}`,
+      jastiperId: '109', jastiperName: 'Ucok Jastip Medan',
+      name: 'Teri Bajak Medan', description: 'Sambal teri pedas gurih',
+      category: 'Makanan & Minuman', brand: 'Teri Bajak', price: 45000, currency: 'IDR',
+      asalProduk: 'Medan', tujuanProduk: target,
+      images: ['https://placehold.co/400x400/FF0000/FFF?text=Teri+Bajak'],
+      stock: 60, estimatedWeight: 0.2, status: 'available' as const, type: 'local' as const
+    }
+  ]))
 ];
 
-export const INDONESIA_CITIES = [
-  'Jakarta',
-  'Bandung',
-  'Surabaya',
-  'Medan',
-  'Semarang',
-  'Yogyakarta',
-  'Denpasar',
-  'Makassar',
-  'Palembang',
-  'Tangerang',
-  'Bekasi',
-  'Depok',
-  'Bogor',
-  'Malang',
-  'Solo',
-  'Balikpapan',
-  'Manado',
-  'Pontianak',
-  'Banjarmasin',
-  'Samarinda',
-];
+// Append these to the main export
+MOCK_PRODUCTS.push(...NEW_MOCK_PRODUCTS);
 
-export const GLOBAL_LOCATIONS = [
-  'Bangkok, Thailand',
-  'Seoul, Korea',
-  'Tokyo, Japan',
-  'Singapore',
-  'Kuala Lumpur, Malaysia',
-  'Hong Kong',
-  'Shanghai, China',
-  'Taipei, Taiwan',
-  'Manila, Philippines',
-  'Ho Chi Minh, Vietnam',
-];
 
 // ============================================
 // HELPER FUNCTIONS
@@ -827,20 +998,20 @@ export const filterProducts = (filters: {
   }
 
   if (filters.asalProduk) {
-    filtered = filtered.filter(p => 
+    filtered = filtered.filter(p =>
       p.asalProduk.toLowerCase().includes(filters.asalProduk!.toLowerCase())
     );
   }
 
   if (filters.tujuanProduk) {
-    filtered = filtered.filter(p => 
+    filtered = filtered.filter(p =>
       p.tujuanProduk.toLowerCase().includes(filters.tujuanProduk!.toLowerCase())
     );
   }
 
   if (filters.search) {
     const searchLower = filters.search.toLowerCase();
-    filtered = filtered.filter(p => 
+    filtered = filtered.filter(p =>
       p.name.toLowerCase().includes(searchLower) ||
       p.description.toLowerCase().includes(searchLower) ||
       p.category.toLowerCase().includes(searchLower)
@@ -872,9 +1043,35 @@ export interface MockOrder {
   status: 'pending' | 'processing' | 'shipping' | 'delivered';
   notes?: string;
   createdAt: string;
+  image?: string;
+  deliveredAt?: string; // Tanggal sampai
+  proofImage?: string; // Bukti foto (placeholder)
 }
 
-export const MOCK_ORDERS: MockOrder[] = [];
+export const MOCK_ORDERS: MockOrder[] = [
+  {
+    id: 'order-sample-1',
+    orderNumber: 'ORD-1715423891000',
+    customerId: '6', // Corenshia G
+    customerName: 'Corenshia G',
+    jastiperId: '108', // Nicole Anacia
+    jastiperName: 'Nicole Anacia',
+    productId: 'p31-3',
+    productName: 'Rempeyek Bayam Malang',
+    productPrice: 15000,
+    quantity: 2,
+    totalPrice: 42500,
+    shippingAddress: 'Jl. Pemuda No. 45, Surabaya',
+    paymentMethod: 'transfer',
+    paymentStatus: 'paid',
+    status: 'delivered',
+    notes: 'Jangan hancur ya kak packing nya',
+    createdAt: '2024-05-11T10:30:00Z',
+    deliveredAt: '2024-05-14T14:20:00Z',
+    image: '/images/jastip/rempeyek-bayam.jpg',
+    proofImage: 'https://placehold.co/400x300/e2e8f0/64748b?text=Bukti+Pengiriman'
+  }
+];
 
 // Save orders to localStorage
 export const saveOrder = (orderData: {
@@ -917,7 +1114,7 @@ export const saveOrder = (orderData: {
   };
 
   MOCK_ORDERS.push(newOrder);
-  
+
   // Save to localStorage
   const existing = localStorage.getItem('flexitip_orders');
   const allOrders = existing ? JSON.parse(existing) : [];
@@ -927,14 +1124,31 @@ export const saveOrder = (orderData: {
   return newOrder;
 };
 
-export const getOrdersByCustomer = (customerId: string): MockOrder[] => {
+// Helper to merge and retrieve orders
+const getAllOrders = (): MockOrder[] => {
   const savedOrders = localStorage.getItem('flexitip_orders');
-  const orders = savedOrders ? JSON.parse(savedOrders) : MOCK_ORDERS;
+  const localOrders: MockOrder[] = savedOrders ? JSON.parse(savedOrders) : [];
+
+  // Combine MOCK_ORDERS from code with localOrders
+  // We use a Map to deduplicate based on ID, favoring localOrders if they exist (for status updates)
+  // BUT for this specific case, we want to ensure our hardcoded mock orders exist.
+  const orderMap = new Map<string, MockOrder>();
+
+  // 1. Add MOCK_ORDERS first
+  MOCK_ORDERS.forEach(order => orderMap.set(order.id, order));
+
+  // 2. Add/Overwrite with localOrders (preserve user changes to status, etc.)
+  localOrders.forEach(order => orderMap.set(order.id, order));
+
+  return Array.from(orderMap.values());
+};
+
+export const getOrdersByCustomer = (customerId: string): MockOrder[] => {
+  const orders = getAllOrders();
   return orders.filter((order: MockOrder) => order.customerId === customerId);
 };
 
 export const getOrdersByJastiper = (jastiperId: string): MockOrder[] => {
-  const savedOrders = localStorage.getItem('flexitip_orders');
-  const orders = savedOrders ? JSON.parse(savedOrders) : MOCK_ORDERS;
+  const orders = getAllOrders();
   return orders.filter((order: MockOrder) => order.jastiperId === jastiperId);
 };

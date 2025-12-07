@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Search, MessageCircle, LogOut } from 'lucide-react';
+import { Search, MessageCircle, LogOut, Package } from 'lucide-react';
 import { useAuthStore } from '../../store/authStore';
 import { useNavigate } from 'react-router-dom';
 import logoFlexiTip from '../../images/flexi-tip.png';
@@ -84,6 +84,13 @@ const Navbar = () => {
 
                                     {/* Dropdown Menu (Logout) */}
                                     <div className="absolute right-0 mt-2 w-48 bg-white rounded-xl shadow-lg py-1 border border-gray-100 opacity-0 invisible group-hover/profile:opacity-100 group-hover/profile:visible transition-all transform origin-top-right z-50">
+                                        <button
+                                            onClick={() => navigate('/order-history')}
+                                            className="w-full text-left px-4 py-2.5 text-sm text-gray-700 hover:bg-gray-50 flex items-center gap-2"
+                                        >
+                                            <Package className="h-4 w-4" />
+                                            Riwayat Order
+                                        </button>
                                         <button
                                             onClick={handleLogout}
                                             className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 flex items-center gap-2"
