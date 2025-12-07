@@ -1,6 +1,7 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 import { GoogleLogin } from '@react-oauth/google';
 import { useNavigate } from 'react-router-dom';
+import { API_URL } from '../src/config';
 
 interface AuthFormData {
   name?: string;
@@ -19,7 +20,7 @@ export default function AuthPage() {
   const [error, setError] = useState('');
   const navigate = useNavigate();
 
-  const API_URL = import.meta.env.VITE_API_URL || 'http://localhost:5000';
+
 
   // Handle regular email/password auth
   const handleSubmit = async (e: React.FormEvent) => {

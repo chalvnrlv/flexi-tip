@@ -5,6 +5,9 @@ export interface User {
   email: string;
   avatar?: string;
   isJastiper?: boolean;
+  role?: 'customer' | 'jastiper' | 'admin';
+  asalDaerah?: string;
+  phone?: string;
 }
 
 export interface ServiceItem {

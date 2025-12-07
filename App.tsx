@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react';
 import { GoogleOAuthProvider } from '@react-oauth/google';
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useParams } from 'react-router-dom';
 import WelcomePage from './pages/WelcomePage';
 import AuthPage from './pages/AuthPage';
 import Dashboard from './pages/Dashboard';
+import CheckoutPage from './pages/CheckoutPage';
 import { useAuthStore } from './store/authStore';
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
@@ -48,6 +49,12 @@ const DashboardWrapper = () => {
   return <Dashboard onLogout={handleLogout} />;
 };
 
+const CheckoutWrapper = () => {
+  const { productId } = useParams<{ productId: string }>();
+  if (!productId) return <Navigate to="/dashboard" replace />;
+  return <CheckoutPage productId={productId} />;
+};
+
 const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const isAuthenticated = useAuthStore(state => state.isAuthenticated);
   if (!isAuthenticated) return <Navigate to="/login" replace />;
@@ -80,6 +87,14 @@ function App() {
               element={
                 <ProtectedRoute>
                   <DashboardWrapper />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/checkout/:productId"
+              element={
+                <ProtectedRoute>
+                  <CheckoutWrapper />
                 </ProtectedRoute>
               }
             />

@@ -17,6 +17,12 @@ export default {
                     500: '#22c55e',
                     600: '#16a34a',
                     700: '#15803d',
+                },
+                brand: {
+                    light: '#FAFF09',
+                    medium: '#159946',
+                    dark: '#06373B',
+                    darkest: '#1a1a1a',
                 }
             }
         },
