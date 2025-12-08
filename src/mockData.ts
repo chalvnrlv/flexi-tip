@@ -1063,8 +1063,8 @@ export const MOCK_ORDERS: MockOrder[] = [
     paymentStatus: 'paid',
     status: 'delivered',
     notes: 'Jangan hancur ya kak packing nya',
-    createdAt: '2024-05-11T10:30:00Z',
-    deliveredAt: '2024-05-14T14:20:00Z',
+    createdAt: '2025-12-03T14:40:00Z',
+    deliveredAt: '2025-12-05T11:35:00Z',
     image: '/images/jastip/rempeyek-bayam.jpg',
     proofImage: '/images/jastip/orderbook.jpg'
   }
