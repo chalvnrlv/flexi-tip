@@ -1066,7 +1066,7 @@ export const MOCK_ORDERS: MockOrder[] = [
     createdAt: '2024-05-11T10:30:00Z',
     deliveredAt: '2024-05-14T14:20:00Z',
     image: '/images/jastip/rempeyek-bayam.jpg',
-    proofImage: 'https://placehold.co/400x300/e2e8f0/64748b?text=Bukti+Pengiriman'
+    proofImage: '/images/jastip/orderbook.jpg'
   }
 ];
 
